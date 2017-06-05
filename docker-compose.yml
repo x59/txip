@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  app:
+    build: .
+    image: txip:latest
+    volumes:
+      - .:/var/www/txip
+    ports:
+      - '127.0.0.1:8081:8081'

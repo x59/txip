@@ -19,16 +19,17 @@ class Application(object):
         :param twisted.web.server.Request request:
         :return: User's IP
         """
+        for header_name in (b'x-real-ip', b'x-forwarded-for'):
+            header_value = request.getHeader(header_name)
+            if header_value:
+                return header_value.decode()
+
         client = request.client
         if isinstance(client, (IPv4Address, IPv6Address)):
             return client.host
-        elif isinstance(client, (UNIXAddress,)):
-            x_forwarded_for = (request.getHeader(b'x-forwarded-for') or b'').decode()
-            if x_forwarded_for:
-                return x_forwarded_for.split(' ')[-1]
-        return 'unknown'
 
+        return 'unknown'
 
 if __name__ == '__main__':
     txip = Application()
-    txip.app.run(endpoint_description='unix:/tmp/txip.sock')
+    txip.app.run(endpoint_description='tcp:8081')
