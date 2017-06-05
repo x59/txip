@@ -12,7 +12,7 @@ class Application(object):
         :return: User's IP
         """
         request.setHeader(b'content-type', b'text/plain')
-        return str(self.get_client_ip(request))
+        return str(self.get_client_ip(request)) + '\n'
 
     def get_client_ip(self, request):
         """
